@@ -32,7 +32,7 @@ node {
               if (isUnix()) {
                 rmsg = sh returnStdout: true, script: "${toolbelt} force:org:create --definitionfile config/enterprise-scratch-def.json --json --setdefaultusername"
               }else{
-                   rmsg = bat returnStdout: true, script: "\"${toolbelt}\" force:org:create --definitionfile config/project-scratch-def.json --json --setdefaultusername"
+                rmsg = bat returnStdout: true, script: "\"${toolbelt}\" force:org:create --definitionfile config/project-scratch-def.json --json --setdefaultusername"
               }
             printf rmsg
             println('Hello from a Job DSL script!')
@@ -54,7 +54,7 @@ node {
         
           stage('Push To Test Org') {
               if (isUnix()) {
-                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:source:push --targetusername ${SFDC_USERNAME}"
+                   rc = sh returnStatus: true, script: "\"${toolbelt}\" force:source:push --targetusername ${SFDC_USERNAME}"
               }else{
                   rc = bat returnStatus: true, script: "\"${toolbelt}\" force:source:push --targetusername ${SFDC_USERNAME}"
               }
@@ -63,6 +63,17 @@ node {
             }
             
           }
+
+            stage('Assign Permission set in Test Org') {
+              if (isUnix()) {
+                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
+              }else{
+                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
+              }
+            if (rc != 0) {
+                error 'data push failed'
+            }
+
 
           stage('Push data Test Org') {
               if (isUnix()) {
