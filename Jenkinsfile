@@ -67,9 +67,9 @@ node {
 
             stage('Assign Permissionset to logged in user') {
               if (isUnix()) {
-                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation -u GeoTestOrg"
+                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
               }else{
-                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation -u GeoTestOrg"
+                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
               }
              if (rc != 0) {
                 error 'data push failed'
