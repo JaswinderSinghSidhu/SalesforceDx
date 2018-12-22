@@ -64,15 +64,21 @@ node {
             
           }
 
-            stage('Assign Permission set in Test Org') {
+
+            stage('Assign Permissionset to logged in user') {
               if (isUnix()) {
-                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
+                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation -u GeoTestOrg"
               }else{
-                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation"
+                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:user:permset:assign -n Geolocation -u GeoTestOrg"
               }
-            if (rc != 0) {
+             if (rc != 0) {
                 error 'data push failed'
+                }
+            
             }
+
+
+
 
 
           stage('Push data Test Org') {
@@ -81,7 +87,7 @@ node {
               }else{
                   rc = bat returnStatus: true, script: "\"${toolbelt}\" force:data:tree:import --plan data/sample-data-plan.json"
               }
-            if (rc != 0) {
+             if (rc != 0) {
                 error 'data push failed'
             }
             
