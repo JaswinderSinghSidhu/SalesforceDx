@@ -63,6 +63,18 @@ node {
             }
             
           }
+
+          stage('Push data Test Org') {
+              if (isUnix()) {
+                    rc = sh returnStatus: true, script: "\"${toolbelt}\" force:data:tree:import --plan data/sample-data-plan.json"
+              }else{
+                  rc = bat returnStatus: true, script: "\"${toolbelt}\" force:data:tree:import --plan data/sample-data-plan.json"
+              }
+            if (rc != 0) {
+                error 'data push failed'
+            }
+            
+        }
              
     }
 }
